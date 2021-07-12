@@ -7,6 +7,7 @@ import morgan from 'morgan'
 
 // Routes 
 import AuthRoutes from './routes/auth/AuthRoutes.js'
+import PostRoutes from './routes/post/PostRoutes.js'
 
 const app = express()
 dotenv.config({ path: 'config/config.env'})
@@ -29,13 +30,14 @@ mongoose.connection.once('open', () => {
     console.log('MongoDB is connected')
 })
 
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+app.use(express.json({ limit: "30mb"}))
+app.use(express.urlencoded({ limit: "30mb",extended: true }))
 app.use(cors({ credentials: true, origin: true}))
 app.use (cookieParser())
 app.use(morgan('dev'))
 
 app.use("/api/auth", AuthRoutes)
+app.use("api/post", PostRoutes)
 
 const PORT = process.env.PORT || 5000
 const server = app.listen(PORT, () => {

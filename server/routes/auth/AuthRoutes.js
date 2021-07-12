@@ -2,7 +2,7 @@ import express from 'express'
 
 import User from '../../models/user/UserModel.js'
 import { authCheck } from '../../middleware/auth/AuthMiddleware.js'
-import { registrationValidation, loginValidation } from '../../validation/Auth/AuthValidation.js'
+import { registrationValidation, loginValidation } from '../../validation/auth/AuthValidation.js'
 
 const { Router } = express
 
