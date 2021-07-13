@@ -37,7 +37,7 @@ app.use (cookieParser())
 app.use(morgan('dev'))
 
 app.use("/api/auth", AuthRoutes)
-app.use("api/post", PostRoutes)
+app.use("/api/posts", PostRoutes)
 
 const PORT = process.env.PORT || 5000
 const server = app.listen(PORT, () => {
