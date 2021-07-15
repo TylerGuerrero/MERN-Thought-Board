@@ -13,8 +13,6 @@ export const Form = () => {
 
     const [formData, setFormData] = useState({ creator: "", title: "", message: "", tags: "", selectedFile: "" })
 
-    console.log(formData)
-
     const handleChange = (e) => {
         setFormData({...formData, [e.target.name]: e.target.value })
     }
