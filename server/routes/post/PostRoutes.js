@@ -15,10 +15,10 @@ router.get("/", async (req, res) => {
 })
 
 router.post("/", async (req, res) => {
-    const { title, message, creator, likeCount, selectedFile } = req.body
+    const { title, message, creator, selectedFile } = req.body
 
     try {   
-        const post = await Post.create({ title, message, creator, likeCount, selectedFile })
+        const post = await Post.create({ title, message, creator, selectedFile })
         return res.status(201).json(post)
     } catch (error) {
         return res.status(400).json({ error: erorr.message })

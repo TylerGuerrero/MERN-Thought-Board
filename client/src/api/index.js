@@ -7,5 +7,5 @@ export const fetchPost = async () => {
 }
 
 export const createPost = async (post) => {
-    return await axios.post("/api/post", post)
+    return await axios.post("/api/posts", post)
 }
