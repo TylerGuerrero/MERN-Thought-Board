@@ -61,6 +61,25 @@ export const postReducer = (state = initialState, action) => {
                 loading: false,
                 error: action.payload
             }
+        case types.UPDATE_POST_LOADING:
+            return {
+                ...state,
+                loading: true,
+                error: null
+            }
+        case types.UPDATE_POST_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                posts: state.posts.map((post) => post._id === action.payload._id ? action.payload: post),
+                error: null
+            }
+        case types.UPDATE_POST_ERROR:
+            return {
+                ...state,
+                loading: false,
+                error: action.payload
+            }
         default:
             return state
     }
