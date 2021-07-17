@@ -51,7 +51,7 @@ export const Form = ({ currentId, setCurrentId }) => {
                 <TextField variant="outlined" color="primary" margin="normal" size="medium" type="text" fullWidth required label="creator" name="creator" value={formData.creator}  onChange={handleChange} />
                 <TextField variant="outlined" color="primary" margin="normal" size="medium" type="text" fullWidth required label="title" name="title" value={formData.title} onChange={handleChange} />
                 <TextField variant="outlined" color="primary" margin="normal" size="medium" type="text" fullWidth required label="message" name="message" value={formData.message} onChange={handleChange} />
-                <TextField variant="outlined" color="primary" margin="normal" size="medium" type="text" fullWidth required label="tags" name="tags" value={formData.tags} onChange={handleChange} />
+                <TextField variant="outlined" color="primary" margin="normal" size="medium" type="text" fullWidth required label="tags" name="tags" value={formData.tags} onChange={(e) => setFormData({ ...formData, tags: e.target.value.split(',')})} />
                 <div className={classes.fileInput}>
                     <FileBase 
                         type="file"

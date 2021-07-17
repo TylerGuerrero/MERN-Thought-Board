@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
         const posts = await Post.find({})
         return res.status(201).json(posts)
     } catch (error) {
-        return res.status(400).json({ message: error.message})
+        return res.status(400).json({ error: error.message})
     }   
 })
 
@@ -30,16 +30,46 @@ router.put("/:id", async (req, res) => {
     const { id: _id } = req.params
     const post = req.body
 
-    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(401).json({ message: "Id not authorized" })
+    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(401).json({ error: "Id not authorized" })
 
     try {
         const updatedPost = await Post.findByIdAndUpdate(_id, { ...post, _id }, { new: true })
         
-        if (!updatedPost) return res.status(401).json({ message: "Post not found"})
+        if (!updatedPost) return res.status(401).json({ error: "Post not found"})
 
         return res.status(201).json(updatedPost)
     } catch(error) {
-        return res.status(500).json({ message: error.message })
+        return res.status(500).json({ error: error.message })
+    }
+})
+
+router.delete("/:id", async (req, res) => {
+    const { id: _id } = req.params
+
+    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(401).json({ error: "Id is not authorized" })
+
+    try {
+        await Post.findByIdAndDelete(_id)
+        return res.status(200).json({ message: "Post deleted" })
+    } catch (error) {
+        return res.status(500).json({ error: error.message })
+    }
+})
+
+router.put("/:id/likeCount", async (req, res) => {
+    const { id: _id } = req.params
+
+    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(401).json({ error: "Id is not Authorized"})
+
+    try {
+        const post = await Post.findById(_id)
+
+        if (!post) return res.status(401).json({ error: "Post not found" })
+        
+        const updatedPost = await Post.findByIdAndUpdate(_id, { likeCount: post.likeCount + 1}, { new: true })
+        return res.status(201).json(updatedPost)
+    } catch (error) {
+        return res.status(401).json({ error: error.message })
     }
 })
 

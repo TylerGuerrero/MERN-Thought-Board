@@ -80,6 +80,44 @@ export const postReducer = (state = initialState, action) => {
                 loading: false,
                 error: action.payload
             }
+        case types.DELETE_POST_LOADING:
+            return {
+                ...state,
+                loading: true,
+                error: null
+            }
+        case types.DELETE_POST_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                error: null,
+                posts: state.posts.filter((post) => post._id !== action.payload._id)
+            }
+        case types.DELETE_POST_ERROR:
+            return {
+                ...state,
+                loading: false,
+                error: action.payload
+            }
+        case types.LIKE_POST_LOADING:
+            return {
+                ...state,
+                loading: true,
+                error: null
+            }
+        case types.LIKE_POST_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                posts: state.posts.map((post) => post._id === action.payload._id ? action.payload: post),
+                error: null
+            }
+        case types.LIKE_POST_ERROR:
+            return {
+                ...state,
+                loading: false,
+                error: action.paylaod
+            }
         default:
             return state
     }

@@ -15,8 +15,8 @@ dotenv.config({ path: 'config/config.env'})
 const options = { 
     useNewUrlParser: true, 
     useUnifiedTopology: true, 
-    useCreateIndex: true, 
-    useFindAndModify: true 
+    useCreateIndex: true,
+    useFindAndModify: true
 }
 
 mongoose.connect(process.env.MONGODB_URL, options)
