@@ -9,19 +9,19 @@ const Posts = ({ setCurrentId }) => {
 
   return (
     <React.Fragment>
-      { loading && <CircularProgress /> }
+      { loading && <CircularProgress />}
       {(!loading && (posts.length > 0)) && (
-        <Grid container alignContent="space-between" alignItems="stretch" spacing={3}>
+        <Grid container alignContent="space-bewteen" alignItems="stretch" spacing={3}>
           {posts.map((post) => {
             return (
               <Grid key={post._id} item xs={12} sm={6} lg={4}>
-                <Post post={post} setCurrentId={setCurrentId} />
+                <Post post={post} setCurrentId={setCurrentId}/>
               </Grid>
             )
-          })}
+          })} 
         </Grid>
       )}
-      {error && <p> { error } </p>}
+      {error && (<p> { error } </p>)}
     </React.Fragment>
   )
 }
