@@ -21,7 +21,7 @@ const Form = ({ currentId, setCurrentId }) => {
         if (currentId && posts.length > 0) {
             setFormData(currentPost)
         }
-    }, [dispatch, currentId])
+    }, [dispatch, currentId, currentPost, posts.length])
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value })
