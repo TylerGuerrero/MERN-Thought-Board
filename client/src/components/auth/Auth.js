@@ -15,15 +15,21 @@ import { signInAction } from '../../redux/auth/actions/AuthActions'
 const Auth = () => {
     const classes = useStyles()
     
-    const [isSignUp, setIsSignUp] = useState(true)
-    const [formData, setFormData] = useState({ first_name: "", last_name: "", email: "" })
-    const [showPassword, setShowPassword] = useState(false)
+    const [isSignUp, setIsSignUp] = useState(false)
+    const [formData, setFormData] = useState({ firstName: "", lastName: "", email: "", password: "", confirmPassword: ""})
+    const [showPassword, setShowPassword] = useState(true)
     
     const dispatch = useDispatch()
     const history = useHistory()
 
     const handleSubmit = (e) => {
         e.preventDefault()
+
+        if (isSignUp) {
+
+        } else {
+            
+        }
     }
 
     const handleChange = (e) => {
@@ -72,7 +78,7 @@ const Auth = () => {
                             )
                         }
                         <Input half={false} variant="outlined" color="primary" type="email" name="email" fullWidth={true} margin="normal" label="Email" size="medium" autoFocus={false} value={formData.email} handleChange={handleChange} />
-                        <Input variant="outlined" name="password" label="password" handleChange={handleChange} fullWidth type={showPassword ? "text" : "password"} handleShowPassword={handleShowPassword}/>
+                        <Input variant="outlined" name="password" label="Password" handleChange={handleChange} fullWidth type={showPassword ? "text" : "password"} handleShowPassword={handleShowPassword}/>
                         { isSignUp && 
                             <Input variant="outlined" fullWidth name="confirmPassword" label="Repeat Password" handleChange={handleChange} type="password"/>
                         }

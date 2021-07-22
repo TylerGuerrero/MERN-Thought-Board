@@ -3,6 +3,8 @@ import mongoose from 'mongoose'
 
 import Post from '../../models/post/PostModel.js'
 
+import { authCheck } from '../../middleware/auth/AuthMiddleware.js'
+
 const { Router } = express
 const router = Router()
 
@@ -15,7 +17,7 @@ router.get("/", async (req, res) => {
     }   
 })
 
-router.post("/", async (req, res) => {
+router.post("/", authCheck, async (req, res) => {
     const { title, message, creator, selectedFile } = req.body
 
     try {   
@@ -26,7 +28,7 @@ router.post("/", async (req, res) => {
     }   
 })
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", authCheck, async (req, res) => {
     const { id: _id } = req.params
     const post = req.body
 
@@ -43,7 +45,7 @@ router.put("/:id", async (req, res) => {
     }
 })
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", authCheck, async (req, res) => {
     const { id: _id } = req.params
 
     if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(401).json({ error: "Id is not authorized" })
@@ -56,17 +58,25 @@ router.delete("/:id", async (req, res) => {
     }
 })
 
-router.put("/:id/likeCount", async (req, res) => {
+router.put("/:id/likeCount", authCheck, async (req, res) => {
     const { id: _id } = req.params
 
     if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(401).json({ error: "Id is not Authorized"})
+    if (!req.userId) return res.status(401).json({ error: "Unauthenticated" })
 
     try {
         const post = await Post.findById(_id)
 
         if (!post) return res.status(401).json({ error: "Post not found" })
-        
-        const updatedPost = await Post.findByIdAndUpdate(_id, { likeCount: post.likeCount + 1}, { new: true })
+        const index = post.likes.findIndex((id) => id === String(req.userId))
+
+        if (index === -1) {
+            post.likes.push(req.userId)
+        } else {
+            post.likes = post.likes.filter((id) => id !== String(req.userId))            
+        }
+
+        const updatedPost = await Post.findByIdAndUpdate(_id, post, { new: true })
         return res.status(201).json(updatedPost)
     } catch (error) {
         return res.status(401).json({ error: error.message })

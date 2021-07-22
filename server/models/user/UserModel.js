@@ -7,9 +7,9 @@ const { Schema, model } = mongoose
 const { sign } = jwt
 
 const userSchema = new Schema({
-    username: {
+    name: {
         type: String,
-        required: [true, "Username is required"],
+        required: [true, "Name is required"],
         minLength: [6, "Minimum character length is 6"],
         maxLength: [255, "Maximum character length is 255"],
     },
@@ -26,6 +26,10 @@ const userSchema = new Schema({
         minLength: [6, "Minimum character length is 6"],
         maxLength: [255, "Maximum character length is 255"],
         select: false
+    },
+    likes: {
+        type: [String],
+        default: []
     }
 }, { timestamps: true })
 

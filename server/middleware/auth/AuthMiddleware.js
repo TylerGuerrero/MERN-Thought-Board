@@ -1,22 +1,26 @@
 import jwt from 'jsonwebtoken'
 
-import User from '../../models/user/UserModel.js'
-
-const { verify } = jwt
+const { verify, decode } = jwt
 
 export const authCheck = async (req, res, next) => {
-    const token = req.cookies.jwt
+    // const token = req.cookies.jwt
+    const token = req.headers.authorization.split(" ")[1]
+    const isCustomAuth = token.length < 500
 
-    if (!token) return res.status(201).json({ error: "JWT does not exist" })
+    if (!token) return res.status(401).json({ error: "Token does not exist" })
+    let decodeToken;
 
     try {
-        const decodedToken = verify(token, process.env.JWT_SECRET)
 
-        const user = await User.findById(decodedToken.id)
+        if (token && isCustomAuth) {
+            decodedToken = verify(token, process.env.JWT_SECRET)
+            req.userId = decodeToken?.id
+        
+        } else {
+            decodeToken = decode(token)
+            req.userId = decodeToken?.sub
+        }
 
-        if (!user) return res.status(401).json({ msg: "User does not exist" })
-
-        req.user = user
         next()
     } catch (error) {   
         return res.status(401).json({ msg: "User does not exist" })
