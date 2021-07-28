@@ -19,13 +19,13 @@ const userSchema = new Schema({
         required: [true, "Email is required"],
         unique: true,
         minLength: [6, "Miniumum length is 6 characters"],
-        maxLength: [255, "Maximum length is 255 charcters"]
+        maxLength: [255, "Maximum length is 255 characters"]
     },
     password: {
         type: String,
         required: [true, "Password is required"],
-        minLength: [6, "Minimum length is 6 charcters"],
-        maxLength: [255, "Maximum length is 255 charcters"],
+        minLength: [6, "Minimum length is 6 characters"],
+        maxLength: [255, "Maximum length is 255 characters"],
         select: false
     },
     likes: {
