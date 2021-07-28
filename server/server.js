@@ -16,7 +16,7 @@ const options = {
     useNewUrlParser: true, 
     useUnifiedTopology: true, 
     useCreateIndex: true,
-    useFindAndModify: true
+    useFindAndModify: false
 }
 
 mongoose.connect(process.env.MONGODB_URL, options)

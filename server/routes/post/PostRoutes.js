@@ -18,10 +18,10 @@ router.get("/", async (req, res) => {
 })
 
 router.post("/", authCheck, async (req, res) => {
-    const post = req.body
+    const body = req.body
 
     try {   
-        const post = await Post.create({ ...post, creator: req.userId })
+        const post = await Post.create({ ...body, creator: req.userId })
         return res.status(201).json(post)
     } catch (error) {
         return res.status(400).json({ error: erorr.message })
