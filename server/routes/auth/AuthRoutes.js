@@ -39,7 +39,7 @@ router.post("/login", async (req, res) => {
         const user = await User.login(email, password)
         const token = user.getJWT()
         res.cookie("jwt", token, { httpOnly: true, maxAge: 3*24*60*60 })
-        return res.status(201).json({ result, user, token })
+        return res.status(201).json({ result: user, token })
     } catch (error) {
         return res.status(500).json({ error: error.message })
     }

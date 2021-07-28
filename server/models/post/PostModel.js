@@ -21,6 +21,9 @@ const postSchema = new Schema({
     likeCount: {
         type: Number,
         default: 0
+    },
+    name: {
+        type: String
     }
 }, { timestamps: true })
 

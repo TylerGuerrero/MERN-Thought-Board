@@ -1,2 +1,12 @@
 export const AUTH = 'AUTH'
+
 export const LOGOUT = 'LOGOUT'
+
+export const LOGIN_LOADING = 'LOGIN_LOADING'
+export const LOGIN_SUCCESS = 'LOGIN_SUCESS'
+export const LOGIN_ERROR = 'LOGIN_ERROR'
+
+export const REGISTER_LOADING = 'REGISTER_LOADING'
+export const REGISTER_SUCCESS = 'REGISTER_SUCCESS'
+export const REGISTER_ERROR = 'REGISTER_ERROR'
+

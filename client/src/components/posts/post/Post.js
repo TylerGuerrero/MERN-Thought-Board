@@ -18,7 +18,7 @@ const Post = ({ post, setCurrentId }) => {
             <CardActionArea>
                 <CardMedia className={classes.media} image={post.selectedFile} title={post.title}/>
                 <div className={classes.overlay}>
-                    <Typography variant="h6" component="h6" color="inherit" align="left" noWrap={false}> {post.title} </Typography>
+                    <Typography variant="h6" component="h6" color="inherit" align="left" noWrap={false}> {post.name} </Typography>
                     <Typography variant="body2" component="body2" color="inherit" align="left" noWrap={false}> { moment(post.createdAt).fromNow() } </Typography>
                 </div>
                 <div className={classes.overlay2}>

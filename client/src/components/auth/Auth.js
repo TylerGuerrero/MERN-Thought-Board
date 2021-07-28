@@ -11,11 +11,13 @@ import Input from './Input'
 import Icon from './Icon'
 
 import { signInAction } from '../../redux/auth/actions/AuthActions.js'
+import { loginAction } from '../../redux/auth/actions/LoginActions'
+import { registerAction } from '../../redux/auth/actions/RegisterActions'
 
 const Auth = () => {
     const classes = useStyles()
 
-    const [isSignUp, setIsSignUp] = useState(true) 
+    const [isSignUp, setIsSignUp] = useState(false) 
     const [formData, setFormData] = useState({ firstName: "", lastName: "", email: "", password: "", confirmPassword: "" })
     const [showPassword, setShowPassword] = useState(false)
 
@@ -30,9 +32,9 @@ const Auth = () => {
         e.preventDefault()
 
         if (isSignUp) {
-
+            dispatch(registerAction(formData, history))
         } else {
-
+            dispatch(loginAction(formData, history))
         }
     }
 
@@ -59,6 +61,7 @@ const Auth = () => {
 
     const switchMode = () => {
         setIsSignUp((prevState) => !prevState)
+        setShowPassword(false)
     }
 
     return (
@@ -78,7 +81,7 @@ const Auth = () => {
                         <Input half={false} variant="outlined" color="primary" margin="normal" size="medium" name="email" label="Email" type="email" required={true} fullWidth={true} value={formData.email} handleChange={handleChange} />
                         <Input half={false} variant="outlined" color="primary" margin="normal" size="medium" name="password" label="Password" type={showPassword ? "password": "text"} required={true} fullWidth={true} value={formData.password} handleChange={handleChange} handleShowPassword={handleShowPassword}/>
                         { isSignUp && (
-                            <Input half={false} variant="outlined" color="primary" margin="normal" size="medium" name="confirmPassword" label="Confirm Password" required={true} fullWidth={true} value={formData.confirmPassword} handleChange={handleChange} />
+                            <Input half={false} variant="outlined" type="password" color="primary" margin="normal" size="medium" name="confirmPassword" label="Confirm Password" required={true} fullWidth={true} value={formData.confirmPassword} handleChange={handleChange} />
                         )}
                         <Grid item xs={12}>
                             <Button type="submit" variant="contained" color="primary" size="medium" fullWidth={true}>{isSignUp ? 'Sign Up': 'Login'}</Button>

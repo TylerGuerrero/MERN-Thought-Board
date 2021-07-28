@@ -1,23 +1,39 @@
 import axios from 'axios'
 
-axios.create({ baseURL: 'http://localhost:5000'})
+const API = axios.create({ baseURL: 'http://localhost:5000'})
+
+API.interceptors.request.use((req) => {
+    if (localStorage.getItem('profile')) {
+        req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem('profile')).token}`
+    }
+    
+    return req
+})
 
 export const fetchPost = async () => {
-    return await axios.get("/api/posts")
+    return await API.get("/api/posts")
 }
 
 export const createPost = async (post) => {
-    return await axios.post("/api/posts", post)
+    return await API.post("/api/posts", post)
 }
 
 export const updatePost = async (id, updatedPost) => {
-    return await axios.put(`/api/posts/${id}`, updatedPost)
+    return await API.put(`/api/posts/${id}`, updatedPost)
 }
 
 export const deletePost = async (id) => {
-    return await axios.delete(`/api/posts/${id}`)
+    return await API.delete(`/api/posts/${id}`)
 }
 
 export const likePost = async (id) => {
-    return await axios.put(`/api/posts/${id}/likeCount`)
+    return await API.put(`/api/posts/${id}/likeCount`)
+}
+
+export const signIn = async (formData) => {
+    return await API.post('/api/auth/login', formData)
+}
+
+export const signUp = async (formData) => {
+    return await API.post('/api/auth/register', formData)
 }

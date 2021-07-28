@@ -2,9 +2,11 @@ import joi from 'joi'
 
 export const registrationValidation = (body) => {
     const registrationBody = {
-        username: joi.string().min(6).max(255).required(),
+        firstName: joi.string().min(3).max(255).required(),
+        lastName: joi.string().min(3).max(255).required(),
         email: joi.string().min(6).max(255).required().email(),
-        password: joi.string().min(6).max(255).required()
+        password: joi.string().min(6).max(255).required(),
+        confirmPassword: joi.string().min(6).max(255).required()
     }
 
     return joi.object(registrationBody).validate(body)
