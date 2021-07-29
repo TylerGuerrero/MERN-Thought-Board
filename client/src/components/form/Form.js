@@ -61,7 +61,7 @@ const Form = ({ currentId, setCurrentId }) => {
                 <form className={`${classes.root} ${classes.form}`} noValidate="off" autoCorrect="on" autoCapitalize="off" onSubmit={handleSubmit}>
                     <Typography variant="h6" component="h6" color="inherit" align="center" noWrap={false} gutterBottom> { currentId ? "Updating" : "Create" } A Memory</Typography>
                     <TextField variant="outlined" color="primary" margin="normal" required fullWidth type="text" label="title" name="title" size="medium" value={formData.title} onChange={handleChange} />
-                    <TextField variant="outlined" color="primary" margin="normal" required fullWidth type="text" label="message" name="message" size="medium" value={formData.message} onChange={handleChange} />
+                    <TextField variant="outlined" color="primary" margin="normal" required fullWidth type="text" label="message" name="message" size="medium" multiline={true} rows={3} value={formData.message} onChange={handleChange} />
                     <TextField variant="outlined" color="primary" margin="normal" required fullWidth type="text" label="tags" name="tags" size="medium" value={formData.tags} onChange={(e) => setFormData({...formData, tags: e.target.value.split(",")})}/>
                     <div className={classes.fileInput}>
                         <FileBase 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { AppBar, Toolbar, Button, Typography, Avatar } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 import { useHistory, useLocation } from 'react-router-dom'
@@ -12,19 +12,18 @@ import { logoutAction } from '../../redux/auth/actions/AuthActions'
 
 const Navbar = () => {
     const classes = useStyles()
-    
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')))
     
     const dispatch = useDispatch()
     const history = useHistory()
     const location = useLocation()
 
-    const logout = () => {
+    const logout = useCallback(() => {
         dispatch(logoutAction())
         history.push("/")    
         setUser(null)
-    }
-    
+    }, [dispatch, history])
+
     useEffect(() => {
         const token = user?.token
 
@@ -37,7 +36,7 @@ const Navbar = () => {
         }
         //jwt
         setUser(JSON.parse(localStorage.getItem('profile')))
-    }, [location, user])
+    }, [location, user?.token, logout])
 
     return (
         <AppBar className={classes.appBar} position="static" color="inherit">
