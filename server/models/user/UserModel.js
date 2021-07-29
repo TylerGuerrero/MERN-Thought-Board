@@ -68,6 +68,10 @@ userSchema.statics.login = async function(email, password) {
     }
 }
 
+userSchema.methods.getJWT = function() {
+    return sign({ id: this._id, email: this.email }, process.env.JWT_SECRET, { expiresIn : 3*24*60*60 })
+}
+
 // create the collection
 const User = model('User', userSchema)
 export default User
