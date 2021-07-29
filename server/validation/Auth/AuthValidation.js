@@ -21,6 +21,6 @@ export const loginValidation = (body) => {
     return joi.object(loginBody).validate(body)
 }
 
-export const forgotPasswordValidation = (email) => {
+export const forgotPassword = (email) => {
     return joi.string().min(6).max(255).required().email().validate(email)
 }

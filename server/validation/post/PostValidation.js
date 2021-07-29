@@ -2,11 +2,11 @@ import joi from 'joi'
 
 export const postValidation = (body) => {
     const postBody = {
-        title : joi.string().min(5).max(100).alphanum().required(),
-        message: joi.string().min(5).max(280).required(),
-        creator: joi.string().min(5).max(100).required(),
-        likeCount: joi.number().required(),
-        selectedFile: joi.string().base64().required()
+        title: joi.string().min(6).max(255),
+        name: joi.string().min(6).max(280),
+        message: joi.string().min(6).max(255),
+        tags: joi.string().min(6).max(255),
+        selectedFile: joi.string().min(6).max(255).base64(),
     }
 
     return joi.object(postBody).validate(body)
