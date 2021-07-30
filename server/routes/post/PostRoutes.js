@@ -83,4 +83,17 @@ router.put("/:id/likeCount", authCheck, async (req, res) => {
     }
 })
 
+
+router.get("/search", async (req, res) => {
+    const { searchQuery, tags } = req.query
+   
+    try {
+        const title = new RegExp(searchQuery, 'i')
+        const posts = await Post.find({ $or: [{ title }, { tags: { $in: tags.split(',') }}]})
+        return res.status(201).json({ data: posts })
+    } catch (error) {
+        console.log(error)
+        return res.status(401).json({ message: error.message})
+    }
+})
 export default router

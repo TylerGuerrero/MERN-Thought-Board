@@ -37,3 +37,7 @@ export const signIn = async (formData) => {
 export const signUp = async (formData) => {
     return await API.post('/api/auth/register', formData)
 }
+
+export const fetchPostsBySearch = async (searchQuery) => {
+    return await API.get(`/api/posts/search/?searchQuery=${searchQuery.search || 'none'}&tags=${searchQuery.tags }`)
+}

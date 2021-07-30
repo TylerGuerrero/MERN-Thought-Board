@@ -11,6 +11,7 @@ import Form from '../form/Form'
 import useStyles from './Styles'
 
 import { fetchPosts } from '../../redux/posts/actions/FetchPostActions'
+import { searchPostsAction } from '../../redux/posts/actions/SearchPostQueryAction'
 
 function useQuery() {
   return new URLSearchParams(useLocation().search)
@@ -29,6 +30,27 @@ const Home = () => {
   const searchQuery = query.get('searchQuery')
 
   const [currentId, setCurrentId] = useState(null)
+  const [search, setSearch] = useState("")
+  const [tags, setTags] = useState([])
+
+  const handleKeyPress = (e) => {
+    if (e.keyCode === 13) {
+      searchPost()
+    }
+  }
+
+  const searchPost = () => {
+    if (search.trim() || tags) {
+      dispatch(searchPostsAction({ search, tags: tags.join(',')}))
+      history.push(`/posts/search?searchQuery=${search || 'none'}&tags=${tags.join(',')}`);
+    } else {
+      history.push("/")
+    }
+  }
+
+  const handleAdd = (tag) => setTags([...tags, tag])
+
+  const handleDelete = (tagToDelete) => setTags(tags.filter((tag) => tag !== tagToDelete))
 
   useEffect(() => {
     dispatch(fetchPosts())
@@ -54,10 +76,20 @@ const Home = () => {
                   variant="outlined"
                   label="Search Memories"
                   fullWidth
-                  value="TEST"
-                  onChange={() => {}}
+                  onKeyPress={handleKeyPress}
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
                 />
               </Toolbar>
+              <ChipInput 
+                  style={{margin: '10px 0'}}
+                  value={tags}
+                  onAdd={(chip) => handleAdd(chip)}
+                  onDelete={(chip) => handleDelete(chip)}
+                  label="Search Tags"
+                  variant="outlined"
+                />
+                <Button variant="contained" color="primary" onClick={searchPost} className={classes.searchButton}>Search</Button>
             </AppBar>
             <Form setCurrentId={setCurrentId} currentId={currentId} />
             <Paper elevation={6} className={classes.pagination}>

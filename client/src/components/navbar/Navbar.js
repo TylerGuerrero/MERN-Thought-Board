@@ -6,7 +6,8 @@ import decode from 'jwt-decode'
 
 import useStyles from './Styles'
 
-import memories from '../../images/memories.png'
+import memoriesLogo from '../../images/memoriesLogo.png'
+import memoriesText from '../../images/memoriesText.png'
 
 import { logoutAction } from '../../redux/auth/actions/AuthActions'
 
@@ -40,8 +41,10 @@ const Navbar = () => {
 
     return (
         <AppBar className={classes.appBar} position="static" color="inherit">
-            <Typography className={classes.heading} variant="h2" component="h2" color="inherit" align="center" noWrap={false}> Memories </Typography>
-            <img className={classes.image} src={memories} height="60" alt="memories"/>
+            <div className={classes.brandContainer}>
+                <img className={classes.image} src={memoriesText} height="45px" alt="icon"/>
+                <img className={classes.image} src={memoriesLogo} height="40px" alt="icon"/>
+            </div>
             <Toolbar className={classes.toolbar}>
             {
                 user ? (

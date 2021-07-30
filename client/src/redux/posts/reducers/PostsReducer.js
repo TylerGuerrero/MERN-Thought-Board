@@ -42,6 +42,26 @@ export const postReducer = (state = initialState, action) => {
                 posts: [],
                 error: action.payload
             }
+        case types.SEARCH_POSTS_LOADING:
+            return {
+                ...state,
+                loading: true,
+                error: null
+            }
+        case types.SEARCH_POSTS_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                posts: action.payload,
+                error: null
+            }
+        case types.SEARCH_POSTS_ERROR: 
+            return {
+                ...state,
+                loading: false,
+                posts: [],
+                error: action.payload
+            }
         case types.CREATE_POST_LOADING: 
             return {
                 ...state,
