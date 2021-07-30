@@ -6,7 +6,7 @@ const { compare, genSalt, hash } = bcrypt
 const { sign } = jwt
 const { model, Schema } = mongoose
 
-// schema define the shape of the documents in the collection
+// schema defines the shape of the document in a collection 
 const userSchema = new Schema({
     name: {
         type: String,
@@ -16,17 +16,17 @@ const userSchema = new Schema({
     },
     email: {
         type: String,
-        required: [true, "Name is required"],
-        unique: true,
+        required: [true, "Email is required"],
         minLength: [6, "Minimum length is 6 characters"],
-        maxLength: [255, "Maximum length is 255 characters"]
+        maxLength: [255, "Maximum length is 255 characters"],
+        unique: true
     },
     password: {
         type: String,
         required: [true, "Password is required"],
-        select: false,
         minLength: [6, "Minimum length is 6 characters"],
-        maxLength: [255, "Maximum length is 255 characters"]
+        maxLength: [255, "Maximum length is 255 characters"],
+        select: false
     }
 }, { timestamps: true })
 
@@ -48,11 +48,11 @@ userSchema.post('save', function(doc, next) {
     next()
 })
 
-// this refers to the Query, login function
+// this refers to the Query
 userSchema.statics.login = async function(email, password) {
     try {
         const user = await this.findOne({ email }).select("+password")
-
+        
         if (!user) throw new Error("User not found")
 
         const isMatch = await compare(password, user.password)
@@ -60,19 +60,19 @@ userSchema.statics.login = async function(email, password) {
         if (isMatch) {
             return user
         } else {
-            throw new Error('Password is incorrect')
+            throw new Error("Password is incorrect")
         }
-    } catch (error) {
+    } catch(error) {
         console.log(error)
         throw new Error(error.message)
     }
 }
 
+// this refers to the document
 userSchema.methods.getJWT = function() {
-    return sign({ id: this._id, email: this.email }, process.env.JWT_SECRET, { expiresIn : 3*24*60*60 })
+    return sign({ id: this._id, email: this.email }, process.env.JWT_SECRET, { expiresIn: 3*24*60*60 })
 }
 
-// create the collection
+// put userSchema into the colleciton
 const User = model('User', userSchema)
 export default User
-

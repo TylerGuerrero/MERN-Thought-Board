@@ -8,7 +8,7 @@ export const registrationValidation = (body) => {
         password: joi.string().min(6).max(255).required(),
         confirmPassword: joi.string().min(6).max(255).required()
     }
-
+    
     return joi.object(registerBody).validate(body)
 }
 
