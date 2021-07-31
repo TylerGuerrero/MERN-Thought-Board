@@ -9,9 +9,15 @@ const { Router } = express
 const router = Router()
 
 router.get("/", async (req, res) => {
+    const { page } = req.query
+
     try {
-        const posts = await Post.find({})
-        return res.status(201).json(posts)
+        const LIMIT = 8
+        const startIndex = Number(page) - 1 * LIMIT
+        const total = await Post.countDocuments({})
+
+        const posts = await Post.find().sort({_id: -1}).limit(LIMIT).skip(startIndex)
+        return res.status(201).json({ data: posts, currentPage: Number(page), numberOfPages: Math.ceil(total / LIMIT)})
     } catch (error) {
         return res.status(400).json({ error: error.message})
     }   

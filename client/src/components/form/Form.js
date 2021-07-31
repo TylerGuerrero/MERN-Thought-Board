@@ -57,7 +57,7 @@ const Form = ({ currentId, setCurrentId }) => {
 
     return (
         <Container maxWidth="lg">
-            <Paper className={classes.paper} elevation={3}>
+            <Paper className={classes.paper} elevation={6}>
                 <form className={`${classes.root} ${classes.form}`} noValidate="off" autoCorrect="on" autoCapitalize="off" onSubmit={handleSubmit}>
                     <Typography variant="h6" component="h6" color="inherit" align="center" noWrap={false} gutterBottom> { currentId ? "Updating" : "Create" } A Memory</Typography>
                     <TextField variant="outlined" color="primary" margin="normal" required fullWidth type="text" label="title" name="title" size="medium" value={formData.title} onChange={handleChange} />

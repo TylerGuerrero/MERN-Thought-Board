@@ -17,7 +17,8 @@ import * as types from '../Types'
 const initialState = {
     loading: false,
     posts: [],
-    error: null
+    error: null,
+    currentPage: null
 }
 
 export const postReducer = (state = initialState, action) => {
@@ -32,7 +33,9 @@ export const postReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                posts: action.payload,
+                posts: action.payload.data,
+                currentPage: action.payload.currentPage,
+                numberOfPages: action.payload.numberOfPages,
                 error: null
             }
         case types.FETCH_POSTS_ERROR:

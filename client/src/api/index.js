@@ -10,8 +10,8 @@ API.interceptors.request.use((req) => {
     return req
 })
 
-export const fetchPost = async () => {
-    return await API.get("/api/posts")
+export const fetchPost = async (page) => {
+    return await API.get(`/api/posts?page=${page}`)
 }
 
 export const createPost = async (post) => {

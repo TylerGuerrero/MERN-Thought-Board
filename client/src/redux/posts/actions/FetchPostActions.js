@@ -28,11 +28,12 @@ const fetchPostsError = (error) => {
     }
 }
 
-export const fetchPosts = () => async (dispatch) => {
+export const fetchPosts = (page) => async (dispatch) => {
     dispatch(fetchPostsLoading())
 
     try {   
-        const { data } = await api.fetchPost()
+        const { data } = await api.fetchPost(page)
+        console.log(page)
         dispatch(fetchPostsSuccess(data))
     } catch (error) {
         dispatch(fetchPostsError(error.message))
