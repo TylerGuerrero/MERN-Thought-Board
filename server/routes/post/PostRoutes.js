@@ -89,7 +89,6 @@ router.put("/:id/likeCount", authCheck, async (req, res) => {
     }
 })
 
-
 router.get("/search", async (req, res) => {
     const { searchQuery, tags } = req.query
    
@@ -102,4 +101,5 @@ router.get("/search", async (req, res) => {
         return res.status(401).json({ message: error.message})
     }
 })
+
 export default router

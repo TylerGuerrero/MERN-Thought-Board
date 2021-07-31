@@ -8,7 +8,7 @@ export const registrationValidation = (body) => {
         password: joi.string().min(6).max(255).required(),
         confirmPassword: joi.string().min(6).max(255).required()
     }
-    
+
     return joi.object(registerBody).validate(body)
 }
 
@@ -21,6 +21,6 @@ export const loginValidation = (body) => {
     return joi.object(loginBody).validate(body)
 }
 
-export const forgotPassword = (email) => {
+export const forgetPassword = (email) => {
     return joi.string().min(6).max(255).required().email().validate(email)
 }
