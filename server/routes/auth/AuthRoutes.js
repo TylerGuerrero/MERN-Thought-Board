@@ -14,7 +14,7 @@ const router = Router()
 router.post("/register", async (req, res) => {
     const { firstName, lastName, email, password, confirmPassword } = req.body
     const { error } = registrationValidation(req.body)
-
+    
     if (error) return res.status(401).json({ error: error.details[0].message })
     if (password !== confirmPassword) return res.status(401).json({ error: "Passwords do not match" })
 
@@ -37,7 +37,7 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
     const { email, password } = req.body
     const { error } = loginValidation(req.body)
-
+    
     if (error) return res.status(401).json({ error: error.details[0].message })
 
     try {

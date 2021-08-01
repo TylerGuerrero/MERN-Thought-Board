@@ -29,7 +29,7 @@ export const loginAction = (formData, history) => async (dispatch) => {
     dispatch(loginActionLoading())
 
     try {
-        const { data } = await api.signIn(formData)
+        const { data } = await api.signIn({ email: formData.email, password: formData.password })
         dispatch(loginActionSuccess(data))
         history.push("/")
     } catch (error) {
