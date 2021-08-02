@@ -1,12 +1,12 @@
 import express from 'express'
 import mongoose from 'mongoose'
 
-const { Router } = express
-const router = Router()
+import Post from '../../models/post/PostModel.js'
 
 import { authCheck } from '../../middleware/auth/AuthMiddleware.js'
 
-import Post from '../../models/post/PostModel.js'
+const { Router } = express
+const router = Router()
 
 router.get("/", async (req, res) => {
     const { page } = req.query
@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
         const startIndex = (Number(page) - 1) * LIMIT
         const total = await Post.countDocuments({})
         const posts = await Post.find({}).sort({ _id: -1 }).skip(startIndex).limit(LIMIT)
-        return res.status(201).json({ data: posts, currentPage: Number(page), numberOfPages: Math.ceil( total / LIMIT )})
+        return res.status(201).json({ data: posts, currentPage: Number(page), numberOfPage: Math.ceil(total / LIMIT )})
     } catch (error) {
         console.log(error)
         return res.status(500).json({ error: error.message })
@@ -27,7 +27,7 @@ router.post("/", authCheck, async (req, res) => {
     const postBody = req.body
 
     try {
-        const post = await Post.create({ ...postBody, creator: req.userId })
+        const post = await Post.create({ ...postBody, creator: req.userId})
         return res.status(201).json(post)
     } catch (error) {
         console.log(error)
@@ -39,45 +39,46 @@ router.put("/:id", authCheck, async (req, res) => {
     const { id: _id } = req.params
     const postBody = req.body
 
-    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(401).json({ error: "Id is not a mongoose Id" })
+    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(401).json({ error: "Id not a valid MongoDB Id" })
 
     try {
-        const post = await Post.findByIdAndUpdate(_id, { ...postBody, _id }, { new: true })
+        const updatedPost = await Post.findByIdAndUpdate(_id, postBody, { new: true }) 
         
-        if (!post) return res.status(401).json({ error: "Post does not exist" })
+        if (!updatedPost) return res.status(401).json({ error: "POst not found" })
 
-        return res.status(201).json(post)
+    
+        return res.status(201).json(updatedPost)
     } catch (error) {
         console.log(error)
-        return res.status(500).json({ error: error.message })
+        return res.status(500).json({ error: error.messsage })
     }
 })
 
 router.delete("/:id", authCheck, async (req, res) => {
     const { id: _id } = req.params
 
-    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(401).json({ error: "Id is not a monoogse Id" })
+    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(401).json({ error: "Id not a valid MongoDB Id" })
 
     try {
-        await Post.findByIdAndDelete(_id).exec()
-        return res.status(201).json({ msg: "Post deleted" })
+        await Post.findByIdAndDelete(_id)
+        return res.status(201).json({ msg: "Post has been deleted" })
     } catch (error) {
         console.log(error)
         return res.status(500).json({ error: error.message })
     }
-})  
+})
 
-router.put("/:id", authCheck, async (req, res) => {
+router.put("/:id/likeCount", authCheck, async (req, res) => {
     const { id: _id } = req.params
 
-    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(401).json({ error: "Id is not a monoogse Id" })
-    
+    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(401).json({ error: "Mongoose Id si not a valid Id" })
+
     try {
         const post = await Post.findById(_id).exec()
 
-        if (!post) return res.status(401).json({ error: "Post does not exist" })
-        
-        const isLike = post.likes.include((like) => like === String(req.userId))
+        if (!post) return res.status(401).json({ error: "POst not found" })
+
+        const isLike = post.likes.includes((like) => like === String(req.userId))
 
         if (isLike) {
             post.likes = post.likes.filter((like) => like !== String(req.userId))
@@ -87,10 +88,10 @@ router.put("/:id", authCheck, async (req, res) => {
 
         const updatedPost = await Post.findByIdAndUpdate(_id, post, { new: true })
         return res.status(201).json(updatedPost)
-    } catch (error) {   
+    } catch (error) {
         console.log(error)
         return res.status(500).json({ error: error.message })
-    }
+    }   
 })
 
 router.get("/search", async (req, res) => {
