@@ -16,3 +16,4 @@ const postSchema = new Schema({
 // creates a posts colleciton for post documents
 const Post = model('Post', postSchema)
 export default Post
+

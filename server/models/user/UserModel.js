@@ -6,19 +6,19 @@ const { compare, genSalt, hash } = bcrypt
 const { sign } = jwt
 const { model, Schema } = mongoose
 
-// user schema creates the shape of the documents of a collection
+// user schema creates the shape of the documnet for a collection
 const userSchema = new Schema({
     name: {
         type: String,
         required: [true, "Name is required"],
         minLength: [6, "Minimum length is 6 characters"],
-        maxLength: [255, "Maximum length s 255 characters"]
+        maxLength: [255, "Maximum length is 255 characters"]
     },
     email: {
         type: String,
         required: [true, "Email is required"],
         unique: true,
-        minLength: [6 , "Minimum length is 6 characters"],
+        minLength: [6, "Miniumum length is 6 characters"],
         maxLength: [255, "Maximum length is 255 characters"]
     },
     password: {
@@ -30,13 +30,12 @@ const userSchema = new Schema({
     }
 }, { timestamps: true })
 
-
-// this refers to the document
+// this refers to the doc
 userSchema.pre('save', async function(next) {
     try {
         const salt = await genSalt(12)
         this.password = await hash(this.password, salt)
-        next()  
+        next()
     } catch (error) {
         console.log(error)
         throw new Error(error.message)
@@ -52,16 +51,16 @@ userSchema.post('save', function(doc, next) {
 // this refers to the query
 userSchema.statics.login = async function(email, password) {
     try {
-        const user = await this.findOne({ email }).select("+password")
+        const user = await this.findOne({ email }).exec()
 
-        if (!user) throw new Error("User Not Found")
+        if (!user) throw new Error('User does not exist')
 
         const isMatch = await compare(password, user.password)
 
         if (isMatch) {
             return user
         } else {
-            throw new Error("Password is incorrect")
+            throw new Error('Password does not match')
         }
     } catch (error) {
         console.log(error)
@@ -69,10 +68,11 @@ userSchema.statics.login = async function(email, password) {
     }
 }
 
+// this refers to doc
 userSchema.methods.getJWT = function() {
-    return sign({ id: this._id, email: this.email }, process.env.JWT_SECRET, { expiresIn: 3*24*60*60 })
+    return sign({ id: this._id, email: this.email}, process.env.JWT_SECRET, { expiresIn: 3*24*24*60 })
 }
 
-// create users collection for user documents
+// create the collection for a user Schema
 const User = model('User', userSchema)
 export default User
