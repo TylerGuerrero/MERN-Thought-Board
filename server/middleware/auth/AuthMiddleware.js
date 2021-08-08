@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken'
 
+// Models
 import User from '../../models/user/UserModel.js'
 
 const { decode, verify } = jwt
@@ -9,15 +10,12 @@ export const authCheck = async (req, res, next) => {
     const isCustomAuth = token.length < 500
     let decodedToken
 
-    if (!token) return res.status(401).json({ error: "Token does not exist" })
+    if (!token) return res.status(401).json({ error: " Token does not exist" })
 
     try {
         if (isCustomAuth) {
             decodedToken = verify(token, process.env.JWT_SECRET)
-            const user = await User.findById(decodedToken.id).exec()
-
-            if (!user) return res.status(401).json({ error: "User does not exist with given id" })
-
+            const user = await User.findById(decodedToken?.id)
             req.user = user
             req.userId = decodedToken?.id
         } else {
