@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { AppBar, Toolbar, Avatar, Button, Typography } from '@material-ui/core'
-import { useHistory, useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
+import { useLocation, useHistory } from 'react-router-dom'
 import decode from 'jwt-decode'
 
 // Actions
@@ -35,41 +35,40 @@ const Navbar = () => {
 
         if (token) {
             const decodedToken = decode(token)
-
-            // token expired
+            
             if (decodedToken.exp * 1000 < new Date().getTime()) {
                 logout()
             }
         }
 
         setUser(JSON.parse(localStorage.getItem("profile")))
-    }, [logout, user?.token, location.pathname])
+    }, [location.pathname, logout, user?.token])
 
     return (
         <AppBar className={classes.appBar} position="static" color="inherit">
             <div className={classes.brandContainer}>
-                <img className={classes.image} src={memoriesLogo} title="Memories Logo" alt="Memories Logo" height="45px" />
-                <img className={classes.image} src={memoriesText} title="Memories Text" alt="Memories Text" height="40px" />
+                <img src={memoriesLogo} alt="Memories Logo" title="Logo" height="45px" />
+                <img src={memoriesText} alt="Memories Text" title="Memories" height="40px" />
             </div>
             <Toolbar className={classes.toolbar}>
-                { 
+                {
                     user ? (
                         <div className={classes.profile}>
-                            <Avatar src={user.result.imageUrl} variant="circular" alt={user.result.name}>
-                                { user.result.name.charAt(0) } 
+                            <Avatar src={user.result.imageUrl} variant="circular" alt="Avatar">
+                                { user.result.name.charAt(0) }
                             </Avatar>
-                            <Typography variant="h6" component="h6" color="inherit" align="center" noWrap={true}>
+                            <Typography variant="h6" component="h6" color="primary" align="center" noWrap={false}>
                                 { user.result.name }
                             </Typography>
                             <Button variant="contained" color="primary" size="small" href="/" onClick={logout}>
-                                Logout  
+                                Logout
                             </Button>
                         </div>
                     ) : (
                         <Button variant="contained" color="primary" size="small" href="/auth">
                             Sign-In
                         </Button>
-                    ) 
+                    )
                 }
             </Toolbar>
         </AppBar>
