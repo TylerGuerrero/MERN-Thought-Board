@@ -7,7 +7,7 @@ import FileBase from 'react-file-base64'
 import { createPostAction } from '../../redux/posts/actions/CreatePostAction'
 import { updatePostAction } from '../../redux/posts/actions/UpdatePostAction'
 
-// Styles 
+// Styles
 import useStyles from './Styles'
 
 const Form = ({ currentId, setCurrentId }) => {
@@ -24,6 +24,11 @@ const Form = ({ currentId, setCurrentId }) => {
         setFormData({ ...formData, [e.target.name]: e.target.value })
     }
 
+    const clear = () => {
+        setFormData({ title: "", message: "", tags: "", selectedFile: "" })
+        setCurrentId(null)
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault()
 
@@ -36,24 +41,19 @@ const Form = ({ currentId, setCurrentId }) => {
         clear()
     }
 
-    const clear = () => {
-        setFormData({ title: "", message: "", tags: "", selectedFile: "" })
-        setCurrentId(null)
-    }
-
     useEffect(() => {
         if (currentId && posts.length > 0) {
             setFormData(currentPost)
         }
 
-    }, [currentId, posts.length, currentPost])
+    }, [currentId, currentPost, posts.length])
 
-    // no user signed in
+    // if user is not signed in
     if (!user?.result?.name) {
         return (
             <Container maxWidth="lg">
                 <Paper className={classes.paper} elevation={6}>
-                    <Typography variant="h6" component="h6" align="center" noWrap={false}>
+                    <Typography variant="h6" component="h6" color="inherit" align="center" noWrap={false}>
                         Please sign in to create your own memories and like others
                     </Typography>
                 </Paper>
@@ -64,21 +64,21 @@ const Form = ({ currentId, setCurrentId }) => {
     return (
         <Container maxWidth="lg">
             <Paper className={classes.paper} elevation={6}>
-                <form className={`${classes.root} ${classes.form}`} noValidate="off" autoComplete="off" autoCapitalize="off" onSubmit={handleSubmit}>
+                <form className={`${classes.root} ${classes.form}`} noValidate="on" autoCapitalize="off" autoComplete="off" onSubmit={handleSubmit}>
                     <Typography variant="h6" component="h6" color="inherit" align="center" noWrap={false}>
-                        {currentId ? "Updating" : "Creating"} A Memory
+                        { currentId ? "Updating" : "Creating"} A Memory
                     </Typography>
-                    <TextField variant="outlined" color="inherit" label="title" margin="normal" required={true} fullWidth={true} name="title" type="text" size="medium" value={formData.title} onChange={handleChange} />
-                    <TextField variant="outlined" color="inherit" label="message" margin="normal" required={true} fullWidth={true} name="message" type="text" value={formData.message} onChange={handleChange} />
-                    <TextField variant="outlined" color="inherit" label="tags" margin="normal" required={true} fullWidth={true} name="tags" type="text" value={formData.tags} onChange={(e) => setFormData({ ...formData, tags: e.target.value.split(",")})}/>
+                    <TextField variant="outlined" color="inherit" margin="normal" type="text" label="title" required={true} fullWidth={true} name="title" size="medium" value={formData.title} onChange={handleChange} />
+                    <TextField variant="outlined" color="inherit" margin="normal" type="text" label="message" required={true} fullWidth={true} name="message" size="medium" multiline={true} rows={3} value={formData.message} onChange={handleChange} />
+                    <TextField variant="outlined" color="inherit" margin="normal" type="text" label="tags" required={true} fullWidth={true} name="tags" size="medium" value={formData.tags} onChange={(e) => setFormData({ ...formData, tags: e.target.value.split(",")})} />
                     <div className={classes.fileInput}>
                         <FileBase 
                             type="file"
                             multiple={false}
-                            onDone={({ base64 }) => setFormData({ ...formData, selectedFile: base64})}
+                            onDone={({ base64 }) => setFormData({ ...formData, selectedFile: base64 })}
                         />
                     </div>
-                    <Button className={classes.buttonSubmit} variant="contained" color="primary" size="medium" fullWidth={true} onClick={handleSubmit}> 
+                    <Button className={classes.buttonSubmit} variant="contained" color="contained" size="medium" fullWidth={true} onClick={handleSubmit}>
                         { currentId ? "Updating" : "Creating"} A Memory
                     </Button>
                     <Button variant="contained" color="secondary" size="medium" fullWidth={true} onClick={clear}>

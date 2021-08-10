@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Card, CardMedia, CardActionArea, CardActions, CardContent, Button, Typography } from '@material-ui/core'
-import { ThumbUpAlt, ThumbUpAltOutlined, Delete, MoreHoriz } from '@material-ui/icons'
+import { Card, CardActionArea, CardMedia, CardContent, CardActions, Button, Typography } from '@material-ui/core'
+import { ThumbUpAlt, ThumbUpAltOutlined, Delete, MoreHoriz, PostAddSharp } from '@material-ui/icons'
 import { useDispatch } from 'react-redux'
 import moment from 'moment'
 
@@ -32,30 +32,28 @@ const Post = ({ post, setCurrentId }) => {
       }
 
     return (
-        <Card className={classes.card} raised={true} elevation={4}>
+        <Card className={classes.card}>
             <CardActionArea>
                 <CardMedia className={classes.media} image={post.selectedFile} title={post.title} />
                 <div className={classes.overlay}>
-                    <Typography variant="h6" component="h6" color="inherit" align="left" noWrap={false}>
-                        { post.title }
+                    <Typography variant="h6" component="h6" align="left" noWrap={false}>
+                        {post.title}
                     </Typography>
-                    <Typography variant="body2" component="body2" color="inherit" align="left" noWrap={false}>
+                    <Typography variant="body2" component="p" align="left" noWrap={false}>
                         { moment(post.createdAt).fromNow() }
                     </Typography>
                 </div>
-                {(user?.result?.googleId === post?.creator || user?.result?._id === post?._id) && (
-                    <div className={classes.overlay2}>
-                        <Button variant="outlined" color="inherit" size="small" onClick={() => setCurrentId(post._id)}>
-                            <MoreHoriz size="default" />
-                        </Button>
-                    </div>
-                )}   
+                {( user?.result?.googleId === post.creator || user?.result?._id === post.creator) && (
+                    <Button variant="outlined" color="inherit" size="small" onClick={() => setCurrentId(post._id)}> 
+                        <MoreHoriz fontSize="small" />
+                    </Button>
+                )}
                 <CardContent>
                     <Typography variant="h5" component="h5" color="inherit" align="left" noWrap={false}>
                         { post.title }
                     </Typography>
                     <div className={classes.details}>
-                        <Typography variant="body2" component="body2" color="inherit" align="left" noWrap={false}>
+                        <Typography variant="body2" component="h6" color="inherit" noWrap={false}>
                             {
                                 post.tags.map((tag) => {
                                     return (
@@ -65,7 +63,7 @@ const Post = ({ post, setCurrentId }) => {
                             }
                         </Typography>
                     </div>
-                    <Typography variant="body2" component="body2" align="left" noWrap={false}>
+                    <Typography variant="body2" component="h6" color="inherit" align="left" noWrap={false}>
                         { post.message }
                     </Typography>
                 </CardContent>
@@ -74,11 +72,11 @@ const Post = ({ post, setCurrentId }) => {
                 <Button variant="contained" color="inherit" size="small" disabled={!user?.result} onClick={() => dispatch(likePostAction(post._id))}>
                     <Likes />
                 </Button>
-                {(user?.result?.googleId === post?.creator || user?.result?._id === post?.creator) && (
-                    <Button style={{ marginLeft: '50px'}} variant="contained" color="secondary" size="small" onClick={() => dispatch(likePostAction(post._id))} endIcon={<Delete fontSize="small"/>}>
+                {((user?.result?.googleId === post?.creator || user?.result?._id === post?.creator) && (
+                    <Button variant="contained" color="secondary" size="small" style={{ marginLeft: "40px" }} endIcon={<Delete fontSize="small" />} onClick={() => dispatch(deletePostAction(post._id))}>
                         Delete
                     </Button>
-                )}
+                ))}
             </CardActions>
         </Card>
     )
