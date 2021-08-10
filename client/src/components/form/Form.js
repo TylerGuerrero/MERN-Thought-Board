@@ -64,7 +64,7 @@ const Form = ({ currentId, setCurrentId }) => {
     return (
         <Container maxWidth="lg">
             <Paper className={classes.paper} elevation={6}>
-                <form className={`${classes.root} ${classes.form}`} noValidate="off" autoComplete="off" autoCapitalize="off">
+                <form className={`${classes.root} ${classes.form}`} noValidate="off" autoComplete="off" autoCapitalize="off" onSubmit={handleSubmit}>
                     <Typography variant="h6" component="h6" color="inherit" align="center" noWrap={false}>
                         {currentId ? "Updating" : "Creating"} A Memory
                     </Typography>
@@ -78,7 +78,7 @@ const Form = ({ currentId, setCurrentId }) => {
                             onDone={({ base64 }) => setFormData({ ...formData, selectedFile: base64})}
                         />
                     </div>
-                    <Button className={classes.buttonSubmit} variant="contained" color="primary" size="medium" fullWidth={true}> 
+                    <Button className={classes.buttonSubmit} variant="contained" color="primary" size="medium" fullWidth={true} onClick={handleSubmit}> 
                         { currentId ? "Updating" : "Creating"} A Memory
                     </Button>
                     <Button variant="contained" color="secondary" size="medium" fullWidth={true} onClick={clear}>
