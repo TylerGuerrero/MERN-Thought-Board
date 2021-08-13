@@ -1,28 +1,32 @@
 import React, { useState } from 'react'
-import { Container, Paper, Grid, Button, Avatar } from '@material-ui/core'
+import { Container, Paper, Avatar, Grid, Button } from '@material-ui/core'
 import { LockOutlined } from '@material-ui/icons'
 import { useDispatch } from 'react-redux'
-import { GoogleLogin } from 'react-google-login'
 import { useHistory } from 'react-router-dom'
+import { GoogleLogin } from 'react-google-login'
 
-import useStyles from './Styles'
-
+// Components
 import Input from './Input'
 import Icon from './Icon'
 
-import { signInAction } from '../../redux/auth/actions/AuthActions.js'
+// Actions 
+import { signInAction } from '../../redux/auth/actions/AuthActions'
 import { loginAction } from '../../redux/auth/actions/LoginActions'
 import { registerAction } from '../../redux/auth/actions/RegisterActions'
+
+// Styles
+import useStyles from './Styles'
 
 const Auth = () => {
     const classes = useStyles()
 
-    const [isSignUp, setIsSignUp] = useState(false) 
-    const [formData, setFormData] = useState({ firstName: "", lastName: "", email: "", password: "", confirmPassword: "" })
-    const [showPassword, setShowPassword] = useState(false)
-
     const dispatch = useDispatch()
+
     const history = useHistory()
+
+    const [formData, setFormData] = useState({ firstName: "", lastName: "", email: "", password: "", confirmPassword: "" })
+    const [isSignUp, setIsSignUp] = useState(false)
+    const [showPassword, setShowPassword] = useState(false)
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -36,6 +40,14 @@ const Auth = () => {
         } else {
             dispatch(loginAction(formData, history))
         }
+    }
+
+    const switchMode = () => {
+        setIsSignUp((prevState) => !prevState)
+    }
+
+    const handleShowPassword = () => {
+        setShowPassword((prevState) => !prevState)
     }
 
     const googleSuccess = async (res) => {
@@ -55,60 +67,59 @@ const Auth = () => {
         console.log('Google Sign in was unsuccessfeul. Try again')
     }
 
-    const handleShowPassword = () => {
-        setShowPassword((prevShowPassword) => !prevShowPassword)
-    }
-
-    const switchMode = () => {
-        setIsSignUp((prevState) => !prevState)
-        setShowPassword(false)
-    }
-
     return (
         <Container maxWidth="xs" component="main">
-            <Paper className={classes.paper} elevation={3}>
-                <Avatar className={classes.avatar}>
+            <Paper className={classes.paper} elevation={6}>
+                <Avatar className={classes.avatar} variant="circular">
                     <LockOutlined />
                 </Avatar>
-                <form className={classes.form} autoCapitalize="off" autoCorrect="off" noValidate="off" onSubmit={handleSubmit}>
+                <form className={classes.form} onSubmit={handleSubmit} noValidate="off" autoCapitalize="off" autoCorrect="off">
                     <Grid container spacing={2}>
-                        { isSignUp && (
-                            <React.Fragment>
-                                <Input half={true} variant="outlined" color="primary" margin="normal" size="medium" name="firstName" label="First Name" type="text" required={true} fullWidth={true} value={formData.firstName} handleChange={handleChange} />
-                                <Input half={true} variant="outlined" color="primary" margin="normal" size="medium" name="lastName" label="Last Name" type="text" required={true} fullWidth={true} value={formData.lastName} handleChange={handleChange} />
-                            </React.Fragment>
-                        )}
-                        <Input half={false} variant="outlined" color="primary" margin="normal" size="medium" name="email" label="Email" type="email" required={true} fullWidth={true} value={formData.email} handleChange={handleChange} />
-                        <Input half={false} variant="outlined" color="primary" margin="normal" size="medium" name="password" label="Password" type={showPassword ? "password": "text"} required={true} fullWidth={true} value={formData.password} handleChange={handleChange} handleShowPassword={handleShowPassword}/>
-                        { isSignUp && (
-                            <Input half={false} variant="outlined" type="password" color="primary" margin="normal" size="medium" name="confirmPassword" label="Confirm Password" required={true} fullWidth={true} value={formData.confirmPassword} handleChange={handleChange} />
-                        )}
+                        {
+                            isSignUp && (
+                                <React.Fragment>
+                                    <Input half={true} variant="outlined" color="primary" margin="normal" size="medium" label="First Name" required={true} fullWidth={true} name="firstName" type="text" value={formData.firstName} handleChange={handleChange} />
+                                    <Input half={true} variant="outlined" color="primary" margin="normal" size="medium" label="Last Name" required={true} fullWidth={true} name="lastName" type="text" value={formData.lastName} handleChange={handleChange} />
+                                </React.Fragment>
+                            )
+                        }
+                        <Input half={false} variant="outlined" color="primary" margin="normal" size="medium" label="Email" required={true} fullWidth={true} name="email" type="email" value={formData.email} handleChange={handleChange} />
+                        <Input half={false} variant="outlined" color="primary" margin="normal" size="medium" label="Password" required={true} fullWidth={true} name="password" type={showPassword ? "password": "text"} value={formData.password} handleChange={handleChange} handleShowPassword={handleShowPassword} />
+                        {
+                            isSignUp && (
+                                <Input half={false} variant="outlined" color="primary" margin="normal" size="medium" label="Confirm Password" required={true} fullWidth={true} name="confirmPassword" type="password" value={formData.confirmPassword} handleChange={handleChange} />
+                            )
+                        }
                         <Grid item xs={12}>
-                            <Button type="submit" variant="contained" color="primary" size="medium" fullWidth={true}>{isSignUp ? 'Sign Up': 'Login'}</Button>
+                            <Button variant="contained" color="primary" type="submit" size="medium" fullWidth={true} onClick={handleSubmit}>
+                                { isSignUp ? "Sign Up" : "Login"}
+                            </Button>
                         </Grid>
                         <Grid item xs={12}>
-                            <GoogleLogin 
-                                clientId="463367151093-qjbvhan0af7rb5vdmp7bl0cka1om51q0.apps.googleusercontent.com"
-                                render={(renderProps) => (
-                                    <Button
-                                        className={classes.googleButton}
-                                        color="primary"
-                                        fullWidth
-                                        onClick={renderProps.onClick}
-                                        disabled={renderProps.disabled}
-                                        startIcon={ <Icon /> }
-                                        variant="contained"
-                                    >
-                                        Google-Sign-IN
-                                    </Button>
-                            )}
-                                onSuccess={googleSuccess}
-                                onFailure={googleFailure}
-                                cookiePolicy="single_host_origin"
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Button variant="outlined" color="inherit" size="large" fullWidth={true} onClick={switchMode}>{isSignUp ? "Already have an account ? Sign In": "Dont have an account ? Sign Up"}</Button>
+                                <GoogleLogin 
+                                    clientId="463367151093-qjbvhan0af7rb5vdmp7bl0cka1om51q0.apps.googleusercontent.com"
+                                    render={(renderProps) => (
+                                        <Button
+                                            className={classes.googleButton}
+                                            color="primary"
+                                            fullWidth
+                                            onClick={renderProps.onClick}
+                                            disabled={renderProps.disabled}
+                                            startIcon={ <Icon /> }
+                                            variant="contained"
+                                        >
+                                            Google-Sign-IN
+                                        </Button>
+                                )}
+                                    onSuccess={googleSuccess}
+                                    onFailure={googleFailure}
+                                    cookiePolicy="single_host_origin"
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Button variant="contained" color="primary" size="medium" fullWidth={true} onClick={switchMode}>
+                                    { isSignUp ? "Already have a account ? Login here" : "Dont have a Account ? Register here"}
+                                </Button>
                         </Grid>
                     </Grid>
                 </form>
