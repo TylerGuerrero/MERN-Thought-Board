@@ -18,7 +18,8 @@ const initialState = {
     loading: false,
     posts: [],
     error: null,
-    currentPage: null
+    currentPage: null,
+    numberOfPages: null
 }
 
 export const postReducer = (state = initialState, action) => {
