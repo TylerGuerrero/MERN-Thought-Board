@@ -95,7 +95,7 @@ const Home = () => {
             <Paper elevation={6} className={classes.pagination}>
               {
                 (!searchQuery && !tags.length) && (
-                  <Paginate page={page} className={classes.pagination}/>
+                  <Paginate page={page} />
                 )
               }
             </Paper>

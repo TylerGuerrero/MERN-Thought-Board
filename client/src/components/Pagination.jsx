@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Pagination, PaginationItem } from '@material-ui/lab'
-import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 // Actions
 import { fetchPosts } from '../redux/posts/actions/FetchPostActions'
@@ -22,13 +22,15 @@ const Paginate = ({ page }) => {
     return (
         <Pagination 
             classes={{ul: classes.ul}}
-            page={Number(page) || 1}
-            count={numberOfPages}
             variant="outlined"
             color="primary"
+            shape="rounded"
+            page={page}
+            count={numberOfPages}
+            size="small"
             renderItem={(item) => (
                 <PaginationItem 
-                    { ...item }
+                    {...item}
                     component={Link}
                     to={`/posts/?page=${item.page}`}
                 />

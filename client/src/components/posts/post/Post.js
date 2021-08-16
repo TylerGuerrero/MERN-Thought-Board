@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Card, CardActionArea, CardMedia, CardContent, CardActions, Button, Typography } from '@material-ui/core'
-import { ThumbUpAlt, ThumbUpAltOutlined, Delete, MoreHoriz, PostAddSharp } from '@material-ui/icons'
+import { ThumbUpAlt, ThumbUpAltOutlined, Delete, MoreHoriz } from '@material-ui/icons'
 import { useDispatch } from 'react-redux'
 import moment from 'moment'
 
