@@ -1,43 +1,45 @@
-import React, { useEffect, useState } from 'react'
-import { Grid, Grow, Container, Paper, AppBar, Toolbar, TextField, Button } from '@material-ui/core'
-import { useDispatch } from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { Paper, Grid, Grow, TextField, Button, Container, AppBar, Toolbar } from '@material-ui/core'
 import { useHistory, useLocation } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 import ChipInput from 'material-ui-chip-input'
 
+// Actions
+import { fetchPosts } from '../../redux/posts/actions/FetchPostActions'
+import { searchPostsAction } from '../../redux/posts/actions/SearchPostQueryAction'
+
+// Components
 import Paginate from '../Pagination'
 import Posts from '../posts/Posts'
 import Form from '../form/Form'
 
+// Styles
 import useStyles from './Styles'
 
-import { fetchPosts } from '../../redux/posts/actions/FetchPostActions'
-import { searchPostsAction } from '../../redux/posts/actions/SearchPostQueryAction'
-
-function useQuery() {
+function useQuery () {
   return new URLSearchParams(useLocation().search)
 }
 
 const Home = () => {
   const classes = useStyles()
-  
-  const dispatch = useDispatch()
-  
+
   const history = useHistory()
   const location = useLocation()
+
+  const dispatch = useDispatch()
+
   const query = useQuery()
 
-  const page = query.get('page') || 1
-  const searchQuery = query.get('searchQuery')
+  const page = query.get("page") || 1
+  const searchQuery = query.get("searchQuery")
 
   const [currentId, setCurrentId] = useState(null)
   const [search, setSearch] = useState("")
-  const [tags, setTags] = useState([])
+  const [tags, searchTags] = useState([])
 
-  const handleKeyPress = (e) => {
-    if (e.keyCode === 13) {
-      searchPost()
-    }
-  }
+  useEffect(() => {
+    dispatch(fetchPosts())
+  }, [dispatch])
 
   const searchPost = () => {
     if (search.trim() || tags) {
@@ -48,62 +50,49 @@ const Home = () => {
     }
   }
 
-  const handleAdd = (tag) => setTags([...tags, tag])
+  const handleKeyPress = (e) => {
+    if (e.keyCode() === 1) {
+      searchPost()
+    }
+  }
 
-  const handleDelete = (tagToDelete) => setTags(tags.filter((tag) => tag !== tagToDelete))
+  const handleAdd = (tag) => {
+    setTags([...tags, tag])
+  }
 
-  useEffect(() => {
-    dispatch(fetchPosts())
-  }, [dispatch])
+  const handleDelete = (tagToDelete) => {
+    setTags(tags.filter((tag) => tag !== tagToDelete))
+  }
 
   return (
     <Grow in>
       <Container maxWidth="xl">
-        <Grid className={classes.gridContainer} container alignContent="space-bewteen" alignItems="stretch" spacing={3}>
+        <Grid className={classes.gridContainer} container alignContent="stretch" justifyContent="stretch" spacing={3}>
           <Grid item xs={12} sm={6} md={9}>
             <Posts setCurrentId={setCurrentId} />
-          </Grid> 
-
+          </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <AppBar 
-              className={classes.appBarSearch}
-              position="static"
-              color="inherit"
-            >
+            <AppBar className={classes.appBarSearch} position="static" color="inherit">
               <Toolbar>
-                <TextField 
-                  name="search"
-                  variant="outlined"
-                  label="Search Memories"
-                  fullWidth
-                  onKeyPress={handleKeyPress}
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
+                <TextField variant="outlined" color="primary" margin="normal" size="medium" required fullWidth type="text" name="search" label="Search" value={search} onChange={(e) => setSearch(e.target.value)} onKeyPress={handleKeyPress} />
               </Toolbar>
-              <ChipInput 
-                  style={{margin: '10px 0'}}
-                  value={tags}
-                  onAdd={(chip) => handleAdd(chip)}
-                  onDelete={(chip) => handleDelete(chip)}
-                  label="Search Tags"
-                  variant="outlined"
-                />
-                <Button variant="contained" color="primary" onClick={searchPost} className={classes.searchButton}>Search</Button>
+              <ChipInput variant="outlined" color="inherit" style={{ margin: "10px 0" }} label="Search Tags" onAdd={(chip) => handleAdd(chip)} onDelete={(chip) => handleDelete(chip)}/>
+              <Button variant="outlined" color="inherit" size="medium" fullWidth onClick={searchPost}>Search</Button>
             </AppBar>
             <Form setCurrentId={setCurrentId} currentId={currentId} />
             <Paper elevation={6} className={classes.pagination}>
               {
-                (!searchQuery && !tags.length) && (
+                (!searchQuery && !tags.length) & (
                   <Paginate page={page} />
                 )
               }
             </Paper>
-          </Grid>
+          </Grid> 
         </Grid>
       </Container>
     </Grow>
   )
+
 }
 
 export default Home
