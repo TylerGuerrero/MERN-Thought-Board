@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { AppBar, Toolbar, Avatar, Typography, Button } from '@material-ui/core'
+import { AppBar, Toolbar, Typography, Avatar, Button } from '@material-ui/core'
 import { useHistory, useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import decode from 'jwt-decode'
@@ -33,7 +33,7 @@ const Navbar = () => {
     useEffect(() => {
         const token = user?.token
 
-        if (token) {    
+        if (token) {
             const decodedToken = decode(token)
 
             if (decodedToken.exp * 1000 < new Date().getTime()) {
@@ -41,34 +41,38 @@ const Navbar = () => {
             }
         }
 
-        // for when user signs or out into to re-render
+        // history.push("/") only re-renders the route with the path
+        // "/" not the whole app therefore you need to re-render here 
+        // when location.pathname changes when signing in
         setUser(JSON.parse(localStorage.getItem("profile")))
-    }, [location.pathname, user?.token, logout])
+    }, [user?.token, location.pathname, logout])
 
     return (
-        <AppBar className={classes.appBar} position="static" color="inherit">
+        <AppBar className={classes.appBar} position="static" color="inherited">
             <div className={classes.brandContainer}>
-                <img className={classes.image} src={memoriesLogo} alt="Memories Logo" title="Logo" height="45px" />
-                <img className={classes.image} src={memoriesText} alt="Memories Text" title="Text" height="40px" />
+                <img src={memoriesLogo} alt="Memories Logo" title="Memories Logo" height="45px" />
+                <img src={memoriesText} alt="Memories Text" title="Memories Text" height="40px" />
             </div>
             <Toolbar className={classes.toolbar}>
-                { user ? (
-                    <div className={classes.profile}>
-                        <Avatar src={user.result.imageUrl} variant="circular" alt="Avatar">
-                            { user.result.name.charAt(0) }
-                        </Avatar>
-                        <Typography variant="h6" component="h6" color="inherit" align="center" noWrap={false}>
-                            { user.result.name }
-                        </Typography>
-                        <Button variant="contained" color="primary" size="small" href="/" onClick={logout}>
-                            Logout
-                        </Button>
-                    </div>
-                ) : (
-                    <Button variant="contained" color="secondary" size="small" href="/auth">
-                        Sign-Up
-                    </Button>
-                )}
+                {
+                    user ? (
+                        <div className={classes.profile}>
+                            <Avatar src={user.result.imageUrl} variant="circular" alt="Avatar">
+                                { user.result.name.charAt(0) }
+                            </Avatar>
+                            <Typography variant="h6" component="h6" color="inherit" align="center" noWrap={false}>
+                                { user.result.name }
+                            </Typography>
+                            <Button variant="contained" color="primary" size="small" href="/" onClick={logout}>
+                                Logout
+                            </Button>
+                        </div>
+                        ) : (
+                            <Button variant="contained" color="primary" size="small" href="/auth">
+                                Sign-Up
+                            </Button>
+                        )
+                }
             </Toolbar>
         </AppBar>
     )

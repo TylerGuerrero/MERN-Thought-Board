@@ -35,7 +35,7 @@ const Home = () => {
 
   const [currentId, setCurrentId] = useState(null)
   const [search, setSearch] = useState("")
-  const [tags, searchTags] = useState([])
+  const [tags, setTags] = useState([])
 
   useEffect(() => {
     dispatch(fetchPosts())
